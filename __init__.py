@@ -1,6 +1,8 @@
-#~ skill-finished-booting - A simple skill to know when mycroft finishes booting up.
-#~ Copyright (C) 2018  zelmon64
-#~ Github - https://github.com/zelmon64
+#~ skill-linux-control - A Mycroft skill to control the linux environment where
+#~ Mycroft is running, using your voice
+#~
+#~ Copyright (C) 2018  octoshrimpy
+#~ Github - https://github.com/octoshrimpy
 
 #~ This program is free software: you can redistribute it and/or modify
 #~ it under the terms of the GNU General Public License as published by
@@ -15,19 +17,55 @@
 #~ You should have received a copy of the GNU General Public License
 #~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from adapt.intent import IntentBuilder
+from mycroft import intent_handler
 from mycroft import MycroftSkill
 from mycroft.util.log import LOG
+
+__author__ = 'octoshrimpy'
+
+class LinuxControl(MycroftSkill):
+
+    # The constructor of the skill, which calls MycroftSkill's constructor
+    def __init__(self):
+        super(OpenSteamSkill, self).__init__(name="OpenSteamSkill")
+
+    # declaration and programming of skill commands
+
+    # reboot
+    @intent_handler(IntentBuilder("RebootIntent").require("RebootKeyword"))
+    def handle_reboot_intent(self, message):
+        self.speak_dialog("finished.action")
+
+    # shutdown
+    @intent_handler(IntentBuilder("ShutDownIntent").require("ShutDownKeyword"))
+    def handle_shut_down_intent(self, message):
+        self.speak_dialog("finished.action")
+
+    # open steam
+    @intent_handler(IntentBuilder("OpenSteamIntent").require("OpenSteamKeyword"))
+    def handle_reboot_intent(self, message):
+        self.speak_dialog("finished.action")
+
+    def stop(self):
+        pass
+
+
+def create_skill():
+    return LinuxControl()
+
+
 
 class FinishedBootingSkill(MycroftSkill):
 
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
         super(FinishedBootingSkill, self).__init__(name="FinishedBootingSkill")
-    
+
     def initialize(self):
         self.add_event("mycroft.skills.initialized", self.handle_boot_finished)
         LOG.debug('add event handle boot finished')
-    
+
     def handle_boot_finished(self):
         self.speak_dialog('finished.booting')
         LOG.debug('finished booting')
